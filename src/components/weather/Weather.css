@@ -40,9 +40,25 @@ section {
     color: #fff;
 }
 
+.date {
+    font-size: 1.6rem;
+}
+
+input {
+    width: 80%;
+}
+
 .result {
     padding: 1rem;
-    background-color: rgba(3, 150, 255, 0.7);
+    background-color: rgba(3, 150, 255, 0.6);
+}
+
+.icon {
+    padding: 10px 0;
+}
+
+.result p {
+    padding: 3px 0;
 }
 
 .error {
