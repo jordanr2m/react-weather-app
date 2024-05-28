@@ -10,10 +10,11 @@ const Weather = () => {
     const [error, setError] = useState(false); // he set it to true initially
     const [errorMesg, setErrorMsg] = useState("");
 
-    // API links
+    // API links & info
     const api = {
         url: "https://api.openweathermap.org/data/2.5/",
         key: "563f7ae8e9f247c3fee33f3e8fa5a3e0",
+        units: "imperial",
     }
 
     // Grab the input of what user types
@@ -27,6 +28,17 @@ const Weather = () => {
         if (e.key === "Enter" && input === "") {
             setErrorMsg("Input cannot be empty")
             setError(true)
+        }
+        
+        // Input is not empty. Now, we will handle fetch request. The city is whatever the user types that is stored in the input state. Turn promise from fetch into data we can work with using .then
+        if (e.key === "Enter" && input !== "") {
+            fetch(`${api.url}weather?q=${input}&units=${api.units}&appid=${api.key}`)
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data)
+            })
         }
     }
 
