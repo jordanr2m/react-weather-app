@@ -5,9 +5,10 @@ const Weather = () => {
     let date = new Date().toLocaleDateString();
 
     const [input, setInput] = useState("");
+    // State that represents an object which will store the data from our API call (data is returned as an object)
     const [weather, setWeather] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false); // he set it to true initially
+    const [error, setError] = useState(true); // Must set to true initially so that no city data is shown on page load
     const [errorMesg, setErrorMsg] = useState("");
 
     // API links & info
@@ -16,6 +17,8 @@ const Weather = () => {
         key: "563f7ae8e9f247c3fee33f3e8fa5a3e0",
         units: "imperial",
     }
+
+    const iconURL = "http://openweathermap.org/img/w/";
 
     // Grab the input of what user types
     const getInput = (e) => {
@@ -29,7 +32,7 @@ const Weather = () => {
             setErrorMsg("Input cannot be empty")
             setError(true)
         }
-        
+
         // Input is not empty. Now, we will handle fetch request. The city is whatever the user types that is stored in the input state. Turn promise from fetch into data we can work with using .then
         if (e.key === "Enter" && input !== "") {
             fetch(`${api.url}weather?q=${input}&units=${api.units}&appid=${api.key}`)
@@ -37,7 +40,10 @@ const Weather = () => {
                 return res.json();
             })
             .then((data) => {
-                console.log(data)
+                console.log(data);
+                setWeather(data); // set the weather equal to data from API call
+                setInput(""); // clear the input field
+                setError(false); // set error state to false once we get our data
             })
         }
     }
@@ -63,13 +69,13 @@ const Weather = () => {
                         <p>{errorMesg}</p>
                     ) : (
                         <div className='result --card --my2'>
-                            <h2>Abuja</h2>
+                            <h2>{weather.name}, {weather.sys.country}</h2>
                             <div className='icon'>
-                                <img src='' alt='Clouds' />
+                                <img src={iconURL + weather.weather[0].icon + ".png"} alt={weather.weather[0].main} />
                             </div>
-                            <p>Temp: 23°C</p>
-                            <p>Weather: Clouds</p>
-                            <p>Temp Range: 23°C / 24°C</p>
+                            <p>Temp: {Math.round(weather.main.temp)}°F</p>
+                            <p>Weather: {weather.weather[0].main}</p>
+                            <p>Temp Range: {Math.round(weather.main.temp_min)}°F / {Math.round(weather.main.temp_max)}°F</p>
                         </div>
                     )}
 
