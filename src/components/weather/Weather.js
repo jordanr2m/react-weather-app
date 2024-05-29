@@ -42,6 +42,11 @@ const Weather = () => {
 
             fetch(`${api.url}weather?q=${input}&units=${api.units}&appid=${api.key}`)
             .then((res) => {
+                // Before we get a response from fetch, check for errors. Saying "if the response is not ok"
+                if (!res.ok) {
+                    throw Error("Failed to fetch data");
+                }
+
                 return res.json();
             })
             .then((data) => {
@@ -50,6 +55,13 @@ const Weather = () => {
                 setInput(""); // clear the input field
                 setError(false); // set error state to false once we get our data
                 setIsLoading(false); // set isLoading state back to false
+            })
+            // Add a .catch to handle errors
+            .catch((err) => {
+                console.log(err.message); // shows "Failed to fetch data"
+                setError(true); // set error state to true
+                setErrorMsg(err.message); // Show the error message
+                setIsLoading(false); // So it doesn't loading state forever
             })
         }
     }
