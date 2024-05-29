@@ -35,6 +35,11 @@ const Weather = () => {
 
         // Input is not empty. Now, we will handle fetch request. The city is whatever the user types that is stored in the input state. Turn promise from fetch into data we can work with using .then
         if (e.key === "Enter" && input !== "") {
+            // Set loading state = to true before fetching data
+            setIsLoading(true);
+            // Set error state to true here in order to prevent weather div from being displayed during loading
+            setError(true);
+
             fetch(`${api.url}weather?q=${input}&units=${api.units}&appid=${api.key}`)
             .then((res) => {
                 return res.json();
@@ -44,6 +49,7 @@ const Weather = () => {
                 setWeather(data); // set the weather equal to data from API call
                 setInput(""); // clear the input field
                 setError(false); // set error state to false once we get our data
+                setIsLoading(false); // set isLoading state back to false
             })
         }
     }
@@ -79,6 +85,8 @@ const Weather = () => {
                         </div>
                     )}
 
+                    {/* Loading state */}
+                    {isLoading && <h3>Loading...</h3>}
                 </div>
             </div>
         </section>
