@@ -3,13 +3,14 @@ import "./Weather.css"
 
 const Weather = () => {
     let date = new Date().toLocaleDateString();
+    // const [dateToday, setDateToday] = useState(date); // Set date here (what instructor did, but I like my approach better)
 
     const [input, setInput] = useState("");
     // State that represents an object which will store the data from our API call (data is returned as an object)
     const [weather, setWeather] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(true); // Must set to true initially so that no city data is shown on page load
-    const [errorMesg, setErrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
 
     // API links & info
     const api = {
@@ -44,7 +45,7 @@ const Weather = () => {
             .then((res) => {
                 // Before we get a response from fetch, check for errors. Saying "if the response is not ok"
                 if (!res.ok) {
-                    throw Error("Failed to fetch data");
+                    throw Error("Failed to fetch data. Please check spelling of city name");
                 }
 
                 return res.json();
@@ -83,8 +84,9 @@ const Weather = () => {
                     </div>
 
                     {/* Check if there is an error & show error message. If no error, then result div is shown */}
+                    {/* Add logic to the className. It is saying, if the errorMsg is not an empty string AKA there is an error, then add this class. If there isn't an error, then don't add a class (empty string) */}
                     {error ? (
-                        <p>{errorMesg}</p>
+                        <p className={errorMsg !== "" ? "error" : ""}>{errorMsg}</p>
                     ) : (
                         <div className='result --card --my2'>
                             <h2>{weather.name}, {weather.sys.country}</h2>
